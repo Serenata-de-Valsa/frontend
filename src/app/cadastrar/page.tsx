@@ -7,7 +7,7 @@ import { setDoc, doc, addDoc, collection, serverTimestamp } from 'firebase/fires
 import { auth, db } from '@/firebase/firebaseConfig'; 
 import CadastroUsuarioForm from '@/components/utils/CadastroUsuarioForm';
 import CadastroEnderecoForm from '@/components/utils/CadastroEnderecoForm';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // Importar useRouter
 
 interface UserData {
   nome: string;
@@ -45,52 +45,54 @@ const CadastroUsuario: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userPrestadorData, setUserPrestadorData] = useState<UserPrestadorData | null>(null);
   const [enderecoData, setEnderecoData] = useState<EnderecoData | null>(null);
-
   const [step, setStep] = useState(1);
 
+  const router = useRouter(); // Inicializa o hook useRouter
   const searchParams = useSearchParams();
   const tipoUsuario = searchParams.get('tipoUsuario') || '0';
 
   const handleUsuarioNext = (dadosUsuario: UserData, dadosUsuarioPrestador: UserPrestadorData) => {
     setUserData({ ...dadosUsuario, tipoUsuario });
-    if (tipoUsuario === '2') {
+    if (tipoUsuario === '1') { // Alterar '2' para '1' para prestador de serviço
       setUserPrestadorData(dadosUsuarioPrestador);
     }
     setStep(2);
   };
-
+  
   const handleEnderecoNext = async (dadosEndereco: EnderecoData) => {
     setEnderecoData(dadosEndereco);
-
+  
     try {
       if (!userData) return;
-
+  
       const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.senha);
       const user = userCredential.user;
-
+  
       const enderecoRef = await addDoc(collection(db, 'enderecos'), {
         ...dadosEndereco,
         dataCriacao: serverTimestamp(),
       });
-
+  
       const enderecoId = enderecoRef.id;
-
+  
       await setDoc(doc(db, 'usuarios', user.uid), {
         ...userData,
-        enderecoId: enderecoId, // Adiciona o ID do endereço ao `userData`
+        enderecoId: enderecoId,
         dataCriacao: serverTimestamp(),
         userId: user.uid,
       });
-
-      if (userData.tipoUsuario === '2' && userPrestadorData) {
+  
+      // Alterar verificação para '1' (prestador de serviço)
+      if (userData.tipoUsuario === '1' && userPrestadorData) {
         await setDoc(doc(db, 'prestadores_servico', user.uid), {
           ...userPrestadorData,
           userId: user.uid,
           dataCriacao: serverTimestamp(),
         });
       }
-
+  
       alert('Usuário e endereço cadastrados com sucesso!');
+      router.push('/login');
     } catch (error) {
       console.error('Erro ao cadastrar o usuário e endereço:', error);
       alert('Ocorreu um erro ao cadastrar o usuário e endereço.');

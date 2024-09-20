@@ -23,14 +23,17 @@ const LoginPage: React.FC = () => {
       const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const tipoUsuario = userData.tipoUsuario; // Assumindo que o tipoUsuario é armazenado no Firestore
+        const tipoUsuario = userData?.tipoUsuario; // Certifica-se de que o campo tipoUsuario existe
 
         // Armazenar as informações do usuário no localStorage
         localStorage.setItem('userId', user.uid);
         localStorage.setItem('tipoUsuario', tipoUsuario);
 
         // Redirecionar para a página principal ou outra página após o login bem-sucedido
-        router.push('/');
+        if(tipoUsuario==="0"){
+         router.push('/');
+        }
+        router.push('/profile_provider');
       } else {
         throw new Error('Usuário não encontrado no banco de dados');
       }

@@ -1,5 +1,6 @@
-'use client';
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, Avatar, Divider } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation'; // Importa usePathname
 import PersonIcon from '@mui/icons-material/Person';
@@ -11,15 +12,53 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
 
 const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
-  const pathname = usePathname(); // Obtém a rota atual
+  const pathname = usePathname();
   
-  // Informações do usuário
-  const fotoPerfilUrl = 'URL_DA_FOTO_DE_PERFIL'; // Atualize para a URL da foto do usuário
-  const nomeUsuario = 'Virgínia Maria';
-  const profissaoUsuario = 'Cabeleireira';
+  // Estado para armazenar as informações do usuário
+  const [userData, setUserData] = useState<{ nome: string, fotoPerfil: string, profissao: string } | null>(null);
+  const [tipoUsuario, setTipoUsuario] = useState<string | null>(null);
+
+  // Verificação de login e tipo de usuário
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const tipoUsuarioLocal = localStorage.getItem('tipoUsuario');
+
+    if (!userId || tipoUsuarioLocal !== '1') {
+      // Se o usuário não estiver logado ou não for prestador, redireciona para login
+      router.push('/login');
+    } else {
+      setTipoUsuario(tipoUsuarioLocal);
+
+      // Busca os dados do usuário
+      const fetchUserData = async () => {
+        const userDoc = await getDoc(doc(db, 'usuarios', userId));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserData({
+            nome: userData?.nome || 'Usuário',
+            fotoPerfil: userData?.fotoPerfil || '/images/default-avatar.png', // Foto padrão
+            profissao: userData?.profissao || 'Profissão não informada',
+          });
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [router]);
+
+  if (tipoUsuario !== '1') {
+    return <Typography>Redirecionando...</Typography>; // Mostra enquanto redireciona
+  }
+
+  // Informações padrão caso não tenha dados do usuário
+  const fotoPerfilUrl = userData?.fotoPerfil || '/images/default-avatar.png';
+  const nomeUsuario = userData?.nome || 'Usuário';
+  const profissaoUsuario = userData?.profissao || 'Profissão não informada';
 
   const menuItems = [
     { text: 'Perfil', icon: <PersonIcon />, path: '/profile_provider' },
@@ -30,7 +69,6 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     { text: 'Agenda', icon: <CalendarTodayIcon />, path: '/profile_provider/agenda' },
     { text: 'Configurações', icon: <SettingsIcon />, path: '/configuracoes' },
   ];
-  
 
   const bottomItems = [
     { text: 'Ajuda', icon: <HelpIcon />, path: '/ajuda' },

@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Avatar, Divider, Button, Chip } from '@mui/material';
+import { Box, Typography, Avatar, Divider, Button } from '@mui/material';
 import { db } from '@/firebase/firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 import SidebarLayout from '@/components/usuario_parceiro/SidebarLayout';
+import { useRouter } from 'next/navigation';
 
 // Interface para Endereço
 interface EnderecoData {
@@ -42,6 +43,7 @@ const PerfilPage: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [enderecoData, setEnderecoData] = useState<EnderecoData | null>(null);
   const [prestadorData, setPrestadorData] = useState<UserPrestadorData | null>(null);
+  const router = useRouter();
 
   // Função para buscar os dados do usuário
   const fetchUserData = async (userId: string) => {
@@ -82,8 +84,10 @@ const PerfilPage: React.FC = () => {
     const userId = localStorage.getItem('userId'); // Assumindo que o ID do usuário está armazenado no localStorage
     if (userId) {
       fetchUserData(userId); // Busca os dados do usuário
+    } else {
+      router.push('/login'); // Redireciona para o login se o usuário não estiver logado
     }
-  }, []);
+  }, [router]);
 
   if (!userData || !enderecoData) {
     return <Typography>Carregando dados...</Typography>;
