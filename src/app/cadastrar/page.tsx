@@ -53,7 +53,7 @@ const CadastroUsuario: React.FC = () => {
 
   const handleUsuarioNext = (dadosUsuario: UserData, dadosUsuarioPrestador: UserPrestadorData) => {
     setUserData({ ...dadosUsuario, tipoUsuario });
-    if (tipoUsuario === '1') { // Alterar '2' para '1' para prestador de serviço
+    if (tipoUsuario === '1') { 
       setUserPrestadorData(dadosUsuarioPrestador);
     }
     setStep(2);

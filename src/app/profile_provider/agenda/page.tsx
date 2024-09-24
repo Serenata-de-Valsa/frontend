@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import SidebarLayout from '@/components/usuario_parceiro/SidebarLayout';
 import { Box, Typography, Grid, Button, TextField, Paper } from '@mui/material';
@@ -14,6 +15,7 @@ const AgendaPage: React.FC = () => {
   const [horariosDisponiveis, setHorariosDisponiveis] = useState<string[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<string>('');
+  const [agendamentosDoDia, setAgendamentosDoDia] = useState<any[]>([]); // Ajuste conforme necessário
 
   // Carrega os horários disponíveis do Firebase
   useEffect(() => {
@@ -23,8 +25,10 @@ const AgendaPage: React.FC = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setHorariosDisponiveis(docSnap.data().horarios || []);
+          setAgendamentosDoDia(docSnap.data().agendamentos || []); // Pega os agendamentos do dia, se disponíveis
         } else {
           setHorariosDisponiveis([]);
+          setAgendamentosDoDia([]); // Se não houver agendamentos, limpa a lista
         }
       }
     };
@@ -35,7 +39,7 @@ const AgendaPage: React.FC = () => {
   const salvarHorarios = async () => {
     if (selectedDate) {
       const docRef = doc(db, 'agendas', format(selectedDate, 'yyyy-MM-dd'));
-      await setDoc(docRef, { horarios: horariosDisponiveis }, { merge: true });
+      await setDoc(docRef, { horarios: horariosDisponiveis, agendamentos: agendamentosDoDia }, { merge: true });
     }
   };
 
@@ -67,7 +71,6 @@ const AgendaPage: React.FC = () => {
             <Paper elevation={3} sx={{ p: 2 }}>
               <Calendar
                 onChange={(value) => {
-                  // O valor pode ser uma data única, um array de datas ou null
                   if (value instanceof Date) {
                     setSelectedDate(value);
                   }
@@ -107,6 +110,23 @@ const AgendaPage: React.FC = () => {
               <Button variant="contained" sx={{ mt: 2 }} onClick={salvarHorarios}>
                 Salvar horários
               </Button>
+            </Paper>
+          </Grid>
+
+          {/* Agendamentos do dia */}
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper elevation={3} sx={{ p: 2 }}>
+              <Typography variant="h6">Agendamentos do dia</Typography>
+              {agendamentosDoDia.length > 0 ? (
+                agendamentosDoDia.map((agendamento, index) => (
+                  <Box key={index} sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Horário: {agendamento.horario}</Typography>
+                    <Typography variant="body2">Cliente: {agendamento.cliente}</Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2">Nenhum agendamento para esta data</Typography>
+              )}
             </Paper>
           </Grid>
         </Grid>
