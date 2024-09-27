@@ -1,18 +1,46 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppBar, Toolbar, IconButton, InputBase, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, IconButton, InputBase, Button, Box, Avatar, Menu, MenuItem } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
-
+import { signOut, onAuthStateChanged } from 'firebase/auth'; // Exemplo com Firebase
+import { auth } from '@/firebase/firebaseConfig'; // Exemplo com Firebase
 
 const Navbar: React.FC = () => {
   const [logado, setLogado] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    // Monitorar o estado de autenticação
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLogado(true);  // Se estiver logado, define o estado como verdadeiro
+      } else {
+        setLogado(false); // Se não estiver logado, define o estado como falso
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleNavigation = (path: string) => {
     router.push(path);
+  };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);  // Faz o logout
+    setLogado(false);
+    handleCloseMenu();
+    router.push('/login');
   };
 
   return (
@@ -47,23 +75,44 @@ const Navbar: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Botões Criar e Entrar */}
-        <Button 
-          onClick={() => handleNavigation('/cadastrar/')}
-          variant="contained"
-          color="primary"
-          sx={{ bgcolor: '#FFB4A2', '&:hover': { backgroundColor: '#6D3F2E' }, color: '#FFF', marginRight: 2 }}
-        >
-          Criar conta
-        </Button>
-        <Button 
-          onClick={() => handleNavigation('/login/')}
-          variant="outlined"
-          color="primary"
-          sx={{ borderColor: '#FFB4A2', '&:hover': { backgroundColor: '#6D3F2E' }, color: '#FFB4A2' }}
-        >
-          Entrar
-        </Button>
+        {/* Exibe botões de login se o usuário não estiver logado */}
+        {!logado ? (
+          <>
+            <Button 
+              onClick={() => handleNavigation('/cadastrar/')}
+              variant="contained"
+              color="primary"
+              sx={{ bgcolor: '#FFB4A2', '&:hover': { backgroundColor: '#6D3F2E' }, color: '#FFF', marginRight: 2 }}
+            >
+              Criar conta
+            </Button>
+            <Button 
+              onClick={() => handleNavigation('/login/')}
+              variant="outlined"
+              color="primary"
+              sx={{ borderColor: '#FFB4A2', '&:hover': { backgroundColor: '#6D3F2E' }, color: '#FFB4A2' }}
+            >
+              Entrar
+            </Button>
+          </>
+        ) : (
+          /* Menu de perfil quando o usuário estiver logado */
+          <>
+            <IconButton onClick={handleMenuClick}>
+              <Avatar alt="User Avatar" src="/images/default-avatar.png" /> {/* Aqui você pode colocar a foto do usuário */}
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleCloseMenu}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <MenuItem onClick={() => handleNavigation('/perfil')}>Minha Conta</MenuItem>
+              <MenuItem onClick={handleLogout}>Sair</MenuItem>
+            </Menu>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );
