@@ -158,7 +158,7 @@ const HomePage: React.FC = () => {
                     nomeServico={servico.descricao}
                     localizacao={`${servico.bairro}, ${servico.cidade}`}
                     nomePrestador={servico.nome_fantasia}
-                    onClick={() => handleNavigation(`/servicos/${servico.id}`)}
+                    onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}
                   />
                 </Grid>
               ))}
