@@ -19,7 +19,7 @@ interface Avaliacao {
 
 interface Prestador {
   nome_fantasia: string;
-  especialidade: string[];
+  especialidade: string | string[];
   ramo: string;
   endereco: string;
   sobre: string;
@@ -113,6 +113,10 @@ const PerfilProfissionalPage: React.FC = () => {
   if (erro) return <Typography>{erro}</Typography>;
   if (!prestador) return <Typography>Prestador não encontrado.</Typography>;
 
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <Box sx={{ backgroundColor: '#fff' }}>
       <Navbar />
@@ -131,18 +135,18 @@ const PerfilProfissionalPage: React.FC = () => {
                 {prestador.nome_fantasia}
               </Typography>
               <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-  {Array.isArray(prestador.especialidade) ? (
-    prestador.especialidade.map((especialidade, index) => (
-      <Button key={index} variant="outlined" sx={{ borderColor: '#8A513D', color: '#8A513D' }}>
-        {especialidade}
-      </Button>
-    ))
-  ) : (
-    <Typography variant="body2" sx={{ color: '#777' }}>
-      {prestador.especialidade || "Especialidade não disponível"}
-    </Typography>
-  )}
-</Box>
+                {Array.isArray(prestador.especialidade) ? (
+                  prestador.especialidade.map((especialidade, index) => (
+                    <Button key={index} variant="outlined" sx={{ borderColor: '#8A513D', color: '#8A513D' }}>
+                      {especialidade}
+                    </Button>
+                  ))
+                ) : (
+                  <Typography variant="body2" sx={{ color: '#777' }}>
+                    {prestador.especialidade || "Especialidade não disponível"}
+                  </Typography>
+                )}
+              </Box>
 
               <Typography variant="body1" sx={{ mt: 2, color: '#555' }}>
                 {prestador.ramo}
@@ -165,7 +169,7 @@ const PerfilProfissionalPage: React.FC = () => {
           {servicos.length > 0 ? (
             servicos.map((servico) => (
               <Grid item xs={12} sm={6} md={4} key={servico.id}>
-                <Box sx={{ borderRadius: 4, boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+                <Box sx={{ borderRadius: 4, boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }} onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}>
                   <img
                     src={servico.imagemUrl || '/images/default-service.png'}
                     alt={servico.categoria}
