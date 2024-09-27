@@ -138,6 +138,20 @@ const HomePage: React.FC = () => {
               image="/images/banners.png"
               alt="Destaque 1"
             />
+
+            <CardMedia
+              component="img"
+              height="300"
+              image="/images/banners2.png"
+              alt="Destaque 1"
+            />
+
+            <CardMedia
+              component="img"
+              height="300"
+              image="/images/banners3.png"
+              alt="Destaque 1"
+            />
           </Carousel>
         </Box>
 

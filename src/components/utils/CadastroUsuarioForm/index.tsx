@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { TextField, Button, Grid, Typography, Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import Footer from '@/components/usuario_cliente/Footer';
+import Link from 'next/link';
+import Image from 'next/image';
+import logo from '/public/images/Logo.png';
 
 interface CadastroUsuarioFormProps {
-  onNext: (dadosUsuario: UserData, dadosUsuarioPrestador: PrestadorData) => void;  // Função para passar os dados para o componente pai
-  tipoUsuario: string; // Adicione tipoUsuario como uma prop
+  onNext: (dadosUsuario: UserData, dadosUsuarioPrestador: PrestadorData) => void;
+  tipoUsuario: string;
 }
 
 interface UserData {
@@ -23,8 +27,8 @@ interface PrestadorData {
   tipo_negocio: string;
   nome_fantasia: string;
   especialidade: string;
-  ramo: string; // Campo para ramo de atuação
-  sobre: string; // Campo para descrição pessoal
+  ramo: string;
+  sobre: string;
 }
 
 const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoUsuario }) => {
@@ -36,24 +40,22 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
     data_nascimento: '',
     telefone: '',
     genero: '',
-    tipoUsuario: tipoUsuario, // Inicializa com tipoUsuario recebido
-    fotoPerfil: null, // Inicializa como null
+    tipoUsuario: tipoUsuario,
+    fotoPerfil: null,
   });
 
   const [formPrestador, setFormPrestador] = useState<PrestadorData>({
     cnpj: '',
-    tipo_negocio: 'MEI', // Valor inicial para o tipo de negócio
+    tipo_negocio: 'MEI',
     nome_fantasia: '',
     especialidade: '',
     ramo: '',
     sobre: ''
   });
 
-  // Funções de manipulação de entrada
-
   const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = event.target.value;
-    value = value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    value = value.replace(/\D/g, '');
     if (value.length > 2) {
       value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
     }
@@ -79,10 +81,6 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleInputChangePrestador = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormPrestador({ ...formPrestador, [e.target.name]: e.target.value });
-  };
-
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     setForm({ ...form, genero: e.target.value });
   };
@@ -92,14 +90,12 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
       alert('CPF inválido. Por favor, insira um CPF válido.');
       return;
     }
-    // Passa os dados para o componente pai
     onNext(form, formPrestador);
   };
 
-  // Função para validar CPF
   const isCPFValid = (cpf: string) => {
-    cpf = cpf.replace(/[^\d]+/g, ''); // Remove todos os caracteres não numéricos
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // Verifica se tem 11 dígitos e se não são todos iguais
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
 
     let sum = 0;
     let remainder;
@@ -123,195 +119,150 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Cadastro do Usuário
-      </Typography>
-      <Typography variant="body1" paragraph>
-        Preencha as informações básicas para o cadastro.
-      </Typography>
+    <Box sx={{ backgroundColor: '#8A6D63', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      {/* Navbar */}
+      <Box component="nav" sx={{ padding: 2, backgroundColor: '#fff', boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)' }}>
+        <Grid container justifyContent="center">
+          <Link href="/" passHref>
+            <Image src={logo} alt="Belezure logo" width={150} height={50} style={{ cursor: 'pointer' }} />
+          </Link>
+        </Grid>
+      </Box>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Button variant="contained" component="label">
-            Upload Foto de Perfil
-            <input type="file" hidden onChange={handleFileChange} />
-          </Button>
-          {form.fotoPerfil && (
-            <Typography variant="body2" sx={{ mt: 1 }}>
-              {form.fotoPerfil.name}
-            </Typography>
-          )}
-        </Grid>
+      {/* Formulário de Cadastro */}
+      <Box sx={{ maxWidth: 500, mx: 'auto', mt: 4, mb: 6, p: 3, backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+        <Typography variant="h5" gutterBottom align="center" sx={{ fontWeight: 'bold', color: '#333' }}>
+          Cadastro de Usuário
+        </Typography>
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Nome Completo"
-            name="nome"
-            value={form.nome}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="E-mail"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Senha"
-            name="senha"
-            type="password"
-            value={form.senha}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="CPF"
-            name="cpf"
-            value={form.cpf}
-            onChange={handleCPFChange}
-            placeholder="000.000.000-00"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Data de Nascimento"
-            name="data_nascimento"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={form.data_nascimento}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Telefone"
-            name="telefone"
-            placeholder="(00) 00000-0000"
-            value={form.telefone}
-            onChange={handlePhoneChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel>Gênero</InputLabel>
-            <Select
-              value={form.genero}
-              onChange={handleSelectChange}
-              name="genero"
-            >
-              <MenuItem value="Masculino">Masculino</MenuItem>
-              <MenuItem value="Feminino">Feminino</MenuItem>
-              <MenuItem value="Não Binário">Não Binário</MenuItem>
-              <MenuItem value="Outro">Outro</MenuItem>
-              <MenuItem value="Prefiro não dizer">Prefiro não dizer</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        {tipoUsuario === '1' && (
-          <>
-            <Typography variant="body1" paragraph>
-              Preencha as informações abaixo para concluir seu cadastro como prestador de serviço.
-            </Typography>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="CNPJ"
-                name="cnpj"
-                value={formPrestador.cnpj}
-                onChange={handleInputChangePrestador}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                Tipo de Negócio
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button variant="outlined" component="label" sx={{ width: '100%', textTransform: 'none', borderColor: '#61392B', color: '#61392B' }}>
+              Upload Foto de Perfil
+              <input type="file" hidden onChange={handleFileChange} />
+            </Button>
+            {form.fotoPerfil && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {form.fotoPerfil.name}
               </Typography>
-              <RadioGroup
-                name="tipo_negocio"
-                value={formPrestador.tipo_negocio}
-                onChange={handleInputChangePrestador}
-                row
-              >
-                <FormControlLabel
-                  value="MEI"
-                  control={<Radio />}
-                  label="MEI (Microempreendedor Individual)"
-                />
-                <FormControlLabel
-                  value="ME"
-                  control={<Radio />}
-                  label="ME (Microempresa) e outros"
-                />
-              </RadioGroup>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Nome Fantasia"
-                name="nome_fantasia"
-                value={formPrestador.nome_fantasia}
-                onChange={handleInputChangePrestador}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Especialidade"
-                name="especialidade"
-                value={formPrestador.especialidade}
-                onChange={handleInputChangePrestador}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Ramo"
-                name="ramo"
-                value={formPrestador.ramo}
-                onChange={handleInputChangePrestador}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Sobre"
-                name="sobre"
-                value={formPrestador.sobre}
-                onChange={handleInputChangePrestador}
-                required
-              />
-            </Grid>
-          </>
-        )}
+            )}
+          </Grid>
 
-        <Grid item xs={12}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-          >
-            Continuar
-          </Button>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Nome Completo"
+              name="nome"
+              value={form.nome}
+              onChange={handleInputChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="E-mail"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleInputChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Senha"
+              name="senha"
+              type="password"
+              value={form.senha}
+              onChange={handleInputChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="CPF"
+              name="cpf"
+              value={form.cpf}
+              onChange={handleCPFChange}
+              placeholder="000.000.000-00"
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Data de Nascimento"
+              name="data_nascimento"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={form.data_nascimento}
+              onChange={handleInputChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Telefone"
+              name="telefone"
+              placeholder="(00) 00000-0000"
+              value={form.telefone}
+              onChange={handlePhoneChange}
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
+              <InputLabel>Gênero</InputLabel>
+              <Select
+                value={form.genero}
+                onChange={handleSelectChange}
+                label="Gênero"
+              >
+                <MenuItem value="Masculino">Masculino</MenuItem>
+                <MenuItem value="Feminino">Feminino</MenuItem>
+                <MenuItem value="Não Binário">Não Binário</MenuItem>
+                <MenuItem value="Outro">Outro</MenuItem>
+                <MenuItem value="Prefiro não dizer">Prefiro não dizer</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ 
+                padding: '12px', 
+                borderRadius: '6px', 
+                backgroundColor: '#61392B', 
+                '&:hover': { backgroundColor: '#502D23' } 
+              }}
+              onClick={handleNext}
+            >
+              Continuar
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
+
+      {/* Footer fora do formulário, ocupando toda a largura da tela */}
+      <Footer />
     </Box>
   );
 };

@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
             <img src="/path-to-partner-logo2" alt="Partner 2" style={{ width: 120 }} />
             <img src="/path-to-partner-logo3" alt="Partner 3" style={{ width: 120 }} />*/}
                         <Typography variant="body2" color="textSecondary">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Universidade Federal do Ceará
                         </Typography>
                     </Box>
                 </Grid>

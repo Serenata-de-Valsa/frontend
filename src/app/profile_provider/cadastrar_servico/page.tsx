@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Grid, RadioGroup, FormControlLabel, Radio, Button, InputAdornment } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { db, storage } from '@/firebase/firebaseConfig'; // Certifique-se de que este caminho está correto
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Para salvar no Firestore
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Para lidar com o upload de imagens
+import { db, storage } from '@/firebase/firebaseConfig';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import SidebarLayout from '@/components/usuario_parceiro/SidebarLayout';
 
 const CadastrarServicoPage: React.FC = () => {
@@ -21,7 +21,6 @@ const CadastrarServicoPage: React.FC = () => {
   const [variacao, setVariacao] = useState('');
   const [imagem, setImagem] = useState<File | null>(null);
 
-  // Manipuladores de evento
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setImagem(event.target.files[0]);
@@ -30,19 +29,15 @@ const CadastrarServicoPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     try {
       let imageUrl = '';
-      
-      // Upload da imagem se houver
       if (imagem) {
         const imageRef = ref(storage, `servicos/${imagem.name}-${Date.now()}`);
         const snapshot = await uploadBytes(imageRef, imagem);
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
-      // Salvar o serviço no Firestore
-      const docRef = await addDoc(collection(db, 'servicos'), {
+      await addDoc(collection(db, 'servicos'), {
         descricao,
         categoria,
         preco,
@@ -50,15 +45,12 @@ const CadastrarServicoPage: React.FC = () => {
         servicoDisponivel: servicoDisponivel === 'sim',
         temVariacoes: temVariacoes === 'sim',
         variacao: temVariacoes === 'sim' ? variacao : '',
-        imagemUrl: imageUrl, // Salva o link da imagem no Firestore
+        imagemUrl: imageUrl,
         dataCriacao: serverTimestamp(),
-        prestadorId: localStorage.getItem('userId'), // Associa o serviço ao prestador logado
+        prestadorId: localStorage.getItem('userId'),
       });
 
-      console.log("Serviço cadastrado com ID: ", docRef.id);
-      // Redirecionar após o cadastro
       router.push('/profile_provider');
-
     } catch (error) {
       console.error("Erro ao cadastrar serviço: ", error);
     }
@@ -66,104 +58,132 @@ const CadastrarServicoPage: React.FC = () => {
 
   return (
     <SidebarLayout>
-    <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Cadastrar Serviços
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Descrição do serviço"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              required
-            />
-          </Grid>
-          
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Categoria Principal"
-              value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
-              required
-              helperText="Adicionar categoria"
-            />
-          </Grid>
-          
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Preço"
-              value={preco}
-              onChange={(e) => setPreco(e.target.value)}
-              required
-              InputProps={{
-                startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="body1">Serviço ativo (visível no perfil)?</Typography>
-            <RadioGroup row value={servicoAtivo} onChange={(e) => setServicoAtivo(e.target.value)}>
-              <FormControlLabel value="sim" control={<Radio />} label="Sim" />
-              <FormControlLabel value="nao" control={<Radio />} label="Não" />
-            </RadioGroup>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="body1">Serviço disponível para ser realizado?</Typography>
-            <RadioGroup row value={servicoDisponivel} onChange={(e) => setServicoDisponivel(e.target.value)}>
-              <FormControlLabel value="sim" control={<Radio />} label="Sim" />
-              <FormControlLabel value="nao" control={<Radio />} label="Não" />
-            </RadioGroup>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="body1">Serviço com variações?</Typography>
-            <RadioGroup row value={temVariacoes} onChange={(e) => setTemVariacoes(e.target.value)}>
-              <FormControlLabel value="sim" control={<Radio />} label="Sim" />
-              <FormControlLabel value="nao" control={<Radio />} label="Não" />
-            </RadioGroup>
-          </Grid>
-
-          {temVariacoes === 'sim' && (
+      <Box
+        sx={{
+          maxWidth: 800,
+          mx: 'auto',
+          mt: 4,
+          backgroundColor: '#fff',
+          borderRadius: 2,
+          p: 4,
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#3A1F18', mb: 4 }}>
+          Cadastrar Serviços
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Definir variação"
-                value={variacao}
-                onChange={(e) => setVariacao(e.target.value)}
+                label="Descrição do serviço"
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+                required
+                sx={{ borderRadius: 2, backgroundColor: '#fff', mb: 3 }}
               />
             </Grid>
-          )}
 
-          <Grid item xs={12}>
-            <Button variant="contained" component="label" fullWidth>
-              Adicionar imagem do serviço
-              <input type="file" hidden accept="image/*" onChange={handleFileChange} />
-            </Button>
-            {imagem && (
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                {imagem.name}
-              </Typography>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Categoria Principal"
+                value={categoria}
+                onChange={(e) => setCategoria(e.target.value)}
+                required
+                helperText="Adicionar categoria"
+                sx={{ borderRadius: 2, backgroundColor: '#fff', mb: 3 }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Preço"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                }}
+                sx={{ borderRadius: 2, backgroundColor: '#fff', mb: 3 }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="body1" sx={{ mb: 1 }}>Serviço ativo (visível no perfil)?</Typography>
+              <RadioGroup row value={servicoAtivo} onChange={(e) => setServicoAtivo(e.target.value)}>
+                <FormControlLabel value="sim" control={<Radio />} label="Sim" />
+                <FormControlLabel value="nao" control={<Radio />} label="Não" />
+              </RadioGroup>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="body1" sx={{ mb: 1 }}>Serviço disponível para ser realizado?</Typography>
+              <RadioGroup row value={servicoDisponivel} onChange={(e) => setServicoDisponivel(e.target.value)}>
+                <FormControlLabel value="sim" control={<Radio />} label="Sim" />
+                <FormControlLabel value="nao" control={<Radio />} label="Não" />
+              </RadioGroup>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="body1" sx={{ mb: 1 }}>Serviço com variações?</Typography>
+              <RadioGroup row value={temVariacoes} onChange={(e) => setTemVariacoes(e.target.value)}>
+                <FormControlLabel value="sim" control={<Radio />} label="Sim" />
+                <FormControlLabel value="nao" control={<Radio />} label="Não" />
+              </RadioGroup>
+            </Grid>
+
+            {temVariacoes === 'sim' && (
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Definir variação"
+                  value={variacao}
+                  onChange={(e) => setVariacao(e.target.value)}
+                  sx={{ borderRadius: 2, backgroundColor: '#fff', mb: 3 }}
+                />
+              </Grid>
             )}
-          </Grid>
 
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <Button variant="contained" color="primary" type="submit" sx={{ mr: 2 }}>
-              Confirmar
-            </Button>
-            <Button variant="outlined" onClick={() => router.push('/profile_provider')}>
-              Cancelar
-            </Button>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                component="label"
+                fullWidth
+                sx={{ backgroundColor: '#8A513D', '&:hover': { backgroundColor: '#6D3F2E' }, mb: 2 }}
+              >
+                Adicionar imagem do serviço
+                <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+              </Button>
+              {imagem && (
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {imagem.name}
+                </Typography>
+              )}
+            </Grid>
+
+            <Grid item xs={12} sx={{ textAlign: 'right' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ backgroundColor: '#8A513D', '&:hover': { backgroundColor: '#6D3F2E' }, mr: 2 }}
+              >
+                Confirmar
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => router.push('/profile_provider')}
+                sx={{ borderColor: '#8A513D', color: '#8A513D', '&:hover': { backgroundColor: '#f5f5f5' } }}
+              >
+                Cancelar
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-    </Box>
+        </form>
+      </Box>
     </SidebarLayout>
   );
 };
