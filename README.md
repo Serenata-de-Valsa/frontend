@@ -79,12 +79,12 @@ Estrutura do Projeto
 
 bash
 
-├── public/                 # Arquivos estáticos (imagens, ícones, etc.)
-├── src/
-│   ├── app/                # Diretório do Next.js para páginas e rotas
-│   ├── components/         # Componentes reutilizáveis
-│   ├── firebase/           # Configurações do Firebase
-└── README.md               # Documentação do projeto
+    ├── public/                 # Arquivos estáticos (imagens, ícones, etc.)
+    ├── src/
+    │   ├── app/                # Diretório do Next.js para páginas e rotas
+    │   ├── components/         # Componentes reutilizáveis
+    │   ├── firebase/           # Configurações do Firebase
+    └── README.md               # Documentação do projeto
 
 Próximos Passos
 
