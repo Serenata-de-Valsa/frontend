@@ -50,13 +50,13 @@ Pré-requisitos
 
 bash
 
-git clone https://github.com/seu-usuario/belezure.git
+[git clone https://github.com/Serenata-de-Valsa/frontend.git]
 
     Instale as dependências:
 
 bash
 
-cd belezure
+cd frontend
 yarn install
 # ou
 npm install
