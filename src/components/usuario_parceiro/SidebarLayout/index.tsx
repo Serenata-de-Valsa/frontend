@@ -34,15 +34,20 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     } else {
       setTipoUsuario(tipoUsuarioLocal);
 
-      // Busca os dados do usuário
+      // Busca os dados do usuário e do prestador
       const fetchUserData = async () => {
         const userDoc = await getDoc(doc(db, 'usuarios', userId));
         if (userDoc.exists()) {
           const userData = userDoc.data();
+
+          // Busca os dados do prestador vinculados ao usuário
+          const prestadorDoc = await getDoc(doc(db, 'prestadores_servico', userId));
+          const profissao = prestadorDoc.exists() ? prestadorDoc.data()?.especialidade : 'Profissão não informada';
+
           setUserData({
             nome: userData?.nome || 'Usuário',
             fotoPerfil: userData?.fotoPerfil || '/images/default-avatar.png', // Foto padrão
-            profissao: userData?.profissao || 'Profissão não informada',
+            profissao: profissao,
           });
         }
       };
