@@ -39,9 +39,6 @@ const LoginPage: React.FC = () => {
         } else {
           router.push('/profile_provider');
         }
-        else{
-          router.push('/profile_provider');
-        }
       } else {
         throw new Error('Usuário não encontrado no banco de dados');
       }
