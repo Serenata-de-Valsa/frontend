@@ -169,18 +169,25 @@ const PerfilProfissionalPage: React.FC = () => {
           {servicos.length > 0 ? (
             servicos.map((servico) => (
               <Grid item xs={12} sm={6} md={4} key={servico.id}>
-                <Box sx={{ borderRadius: 4, boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }} onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}>
+                <Box sx={{ 
+                    borderRadius: 4, 
+                    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
+                    cursor: 'pointer', 
+                  }} 
+                  onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}>
                   <img
                     src={servico.imagemUrl || '/images/default-service.png'}
                     alt={servico.categoria}
                     style={{ width: '100%', borderRadius: '8px' }}
                   />
-                  <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
-                    {servico.categoria} - R$ {servico.preco}
-                  </Typography>
-                  <Typography variant="body2" sx={{ textAlign: 'center', color: '#555', mt: 1 }}>
-                    {servico.descricao}
-                  </Typography>
+                  <Box sx={{p: 2}}>
+                    <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
+                      {servico.categoria} - R$ {servico.preco}
+                    </Typography>
+                    <Typography variant="body2" sx={{ textAlign:'justify', color: '#555', mt: 2 }}>
+                      {servico.descricao}
+                    </Typography>
+                  </Box>
                 </Box>
               </Grid>
             ))

@@ -8,12 +8,13 @@ interface ServicoCardProps {
   idPrestador: string;
   foto: string;
   nomeServico: string;
+  preco: string;
   localizacao: string;
   nomePrestador: string;
   onClick: () => void;
 }
 
-const ServicoCard: React.FC<ServicoCardProps> = ({ idPrestador, foto, nomeServico, localizacao, nomePrestador, onClick }) => {
+const ServicoCard: React.FC<ServicoCardProps> = ({ idPrestador, foto, nomeServico, preco, localizacao, nomePrestador, onClick }) => {
   const router = useRouter();
 
   const handleClickPrestador = (event: React.MouseEvent) => {
@@ -36,7 +37,7 @@ const ServicoCard: React.FC<ServicoCardProps> = ({ idPrestador, foto, nomeServic
     <Card sx={{ cursor: 'pointer' }} onClick={onClick}>
       <CardMedia component="img" height="250" image={foto} alt={nomeServico} />
       <CardContent>
-        <Typography variant="h6">{nomeServico}</Typography>
+        <Typography variant="h6">{nomeServico} - R$ {preco}</Typography>
         <Typography variant="body2" color="textSecondary">{localizacao}</Typography>
         {/* O nome do prestador é clicável e redireciona para o perfil */}
         <Typography

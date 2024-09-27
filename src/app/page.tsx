@@ -174,6 +174,7 @@ const HomePage: React.FC = () => {
                     idPrestador={servico.prestadorId}
                     foto={servico.foto}
                     nomeServico={servico.categoria}
+                    preco = {servico.preco}
                     localizacao={`${servico.bairro}, ${servico.cidade}`}
                     nomePrestador={servico.nome_fantasia}
                     onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}

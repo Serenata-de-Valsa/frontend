@@ -4,7 +4,7 @@ import { Box, Grid, Typography, Link as MuiLink } from '@mui/material';
 
 const Footer: React.FC = () => {
     return (
-        <Box sx={{ backgroundColor: '#f5f5f5', padding: 4}}>
+        <Box justifyContent="space-between" sx={{ backgroundColor: '#f5f5f5', padding: 4}}>
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={3}>
                     <img src="/images/Logo.png" alt="Logo" style={{ width: 150, marginBottom: 16 }} />

@@ -134,12 +134,12 @@ const DetalheServico: React.FC = () => {
           </Grid>
         </Grid>
 
-        {/* Denunciar serviço */}
+        {/* Denunciar serviço 
         <Box mt={4} sx={{ textAlign: 'center' }}>
           <Button variant="text" sx={{ color: '#d32f2f' }}>
             Denunciar serviço
           </Button>
-        </Box>
+        </Box>*/}
       </Container>
       <Footer />
     </Box>
