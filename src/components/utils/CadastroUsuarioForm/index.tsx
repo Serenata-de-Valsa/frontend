@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { TextField, Button, Grid, Typography, Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import Footer from '@/components/usuario_cliente/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -79,6 +81,10 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleInputChangePrestador = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormPrestador({ ...formPrestador, [e.target.name]: e.target.value });
   };
 
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
@@ -242,6 +248,84 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
               </Select>
             </FormControl>
           </Grid>
+
+          {/* Se for um prestador, mostrar os campos adicionais */}
+          {tipoUsuario === '1' && (
+            <>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="CNPJ"
+                  name="cnpj"
+                  value={formPrestador.cnpj}
+                  onChange={handleInputChangePrestador}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Tipo de Negócio
+                </Typography>
+                <RadioGroup
+                  name="tipo_negocio"
+                  value={formPrestador.tipo_negocio}
+                  onChange={handleInputChangePrestador}
+                  row
+                >
+                  <FormControlLabel
+                    value="MEI"
+                    control={<Radio />}
+                    label="MEI (Microempreendedor Individual)"
+                  />
+                  <FormControlLabel
+                    value="ME"
+                    control={<Radio />}
+                    label="ME (Microempresa)"
+                  />
+                </RadioGroup>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Nome Fantasia"
+                  name="nome_fantasia"
+                  value={formPrestador.nome_fantasia}
+                  onChange={handleInputChangePrestador}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Especialidade"
+                  name="especialidade"
+                  value={formPrestador.especialidade}
+                  onChange={handleInputChangePrestador}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Ramo"
+                  name="ramo"
+                  value={formPrestador.ramo}
+                  onChange={handleInputChangePrestador}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Sobre"
+                  name="sobre"
+                  value={formPrestador.sobre}
+                  onChange={handleInputChangePrestador}
+                />
+              </Grid>
+            </>
+          )}
 
           <Grid item xs={12}>
             <Button
