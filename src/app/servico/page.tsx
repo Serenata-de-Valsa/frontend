@@ -89,7 +89,7 @@ const DetalheServico: React.FC = () => {
             <img src={servico.imagemUrl} alt={servico.descricao} style={{ width: '100%', borderRadius: 8 }} />
           </Grid>
 
-          {/* Detalhes do serviço */}
+          {/* Detalhes do serviço  */}
           <Grid item xs={12} md={6}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#8A513D' }}>
               {servico.categoria}

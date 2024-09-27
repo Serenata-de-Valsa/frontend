@@ -34,7 +34,7 @@ const ServicoCard: React.FC<ServicoCardProps> = ({ idPrestador, foto, nomeServic
 
   return (
     <Card sx={{ cursor: 'pointer' }} onClick={onClick}>
-      <CardMedia component="img" height="140" image={foto} alt={nomeServico} />
+      <CardMedia component="img" height="250" image={foto} alt={nomeServico} />
       <CardContent>
         <Typography variant="h6">{nomeServico}</Typography>
         <Typography variant="body2" color="textSecondary">{localizacao}</Typography>
