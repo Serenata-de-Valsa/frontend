@@ -43,37 +43,34 @@ Pré-requisitos
     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
     NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+    
+Instalação
 
-    Instalação
-
-    Clone o repositório:
-
+Clone o repositório:
 bash
 
-[git clone https://github.com/Serenata-de-Valsa/frontend.git]
+    [git clone https://github.com/Serenata-de-Valsa/frontend.git]
 
     Instale as dependências:
 
 bash
 
-cd frontend
-yarn install
+    cd frontend
+    yarn install
 # ou
-npm install
+    npm install
 
-    Execute o projeto:
+Execute o projeto:
 
 bash
 
-yarn dev
+    yarn dev
 # ou
-npm run dev
+    npm run dev
 
     Acesse no navegador:
 
-arduino
-
-http://localhost:3000
+    http://localhost:3000
 
 Estrutura do Projeto
 
@@ -88,8 +85,9 @@ bash
 
 Próximos Passos
 
-    Implementação de IA: Futuras melhorias podem incluir a implementação de Inteligência Artificial para oferecer recomendações personalizadas de serviços para os clientes com base em seus agendamentos anteriores.
-    Geolocalização: Permitir que clientes encontrem prestadores mais próximos de sua localização atual.
+Implementação de IA: Futuras melhorias podem incluir a implementação de Inteligência Artificial para oferecer recomendações personalizadas de serviços para os clientes com base em seus agendamentos anteriores.
+
+Geolocalização: Permitir que clientes encontrem prestadores mais próximos de sua localização atual.
 
 Contribuições
 
