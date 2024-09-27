@@ -51,10 +51,7 @@ const Navbar: React.FC = () => {
           <img src="/images/Logo.png" alt="Logo" style={{ width: 150 }} />
         </IconButton>
 
-        {/* Geolocalização */}
-        <IconButton color="inherit" aria-label="geolocation">
-          <LocationOn />
-        </IconButton>
+      
 
         {/* Área de Pesquisa */}
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

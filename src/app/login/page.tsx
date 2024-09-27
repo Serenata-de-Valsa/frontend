@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
       <Box component="nav" sx={{ padding: 2, backgroundColor: '#fff', boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)' }}>
         <Grid container justifyContent="center">
           <Link href="/" passHref>
-            <Image src={logo} alt="Belezure logo" width={150} height={50} style={{ cursor: 'pointer' }} />
+            <Image src={logo} alt="Belezure logo" width={150} height={40} style={{ cursor: 'pointer' }} />
           </Link>
         </Grid>
       </Box>

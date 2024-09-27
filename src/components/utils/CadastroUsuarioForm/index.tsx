@@ -1,11 +1,9 @@
-"use client";
-
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography, Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import Footer from '@/components/usuario_cliente/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
-import logo from '/public/images/Logo.png';
+import logo from '/public/images/Logo.png'; // Caminho do logo
 
 interface CadastroUsuarioFormProps {
   onNext: (dadosUsuario: UserData, dadosUsuarioPrestador: PrestadorData) => void;
@@ -125,17 +123,38 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
   };
 
   return (
-    <Box sx={{ backgroundColor: '#8A6D63', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       {/* Navbar */}
       <Box component="nav" sx={{ padding: 2, backgroundColor: '#fff', boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)' }}>
         <Grid container justifyContent="center">
           <Link href="/" passHref>
-            <Image src={logo} alt="Belezure logo" width={150} height={50} style={{ cursor: 'pointer' }} />
+            <Image src={logo} alt="Belezure logo" width={150} height={40} style={{ cursor: 'pointer' }} />
           </Link>
         </Grid>
       </Box>
 
-      {/* Formulário de Cadastro */}
+      {/* Background Image */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1, // Coloca a imagem atrás do conteúdo
+          opacity: 0.9,
+        }}
+      >
+        <Image
+          src="/images/background2.png" // Substitua pelo caminho da sua imagem
+          alt="Background Image"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
+      </Box>
+
+      {/* Formulário de Cadastro de Usuário */}
       <Box sx={{ maxWidth: 500, mx: 'auto', mt: 4, mb: 6, p: 3, backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <Typography variant="h5" gutterBottom align="center" sx={{ fontWeight: 'bold', color: '#333' }}>
           Cadastro de Usuário
@@ -345,7 +364,7 @@ const CadastroUsuarioForm: React.FC<CadastroUsuarioFormProps> = ({ onNext, tipoU
         </Grid>
       </Box>
 
-      {/* Footer fora do formulário, ocupando toda a largura da tela */}
+      {/* Footer fora do formulário */}
       <Footer />
     </Box>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography, Box } from '@mui/material';
-import Footer from '@/components/usuario_cliente/Footer'; // Mesma estrutura de Footer usada antes
+import Footer from '@/components/usuario_cliente/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '/public/images/Logo.png'; // Caminho do logo
@@ -16,7 +16,7 @@ interface EnderecoData {
 }
 
 interface CadastroEnderecoFormProps {
-  onNext: (dadosEndereco: EnderecoData) => void; // Função para passar os dados para o componente pai
+  onNext: (dadosEndereco: EnderecoData) => void;
 }
 
 const CadastroEnderecoForm: React.FC<CadastroEnderecoFormProps> = ({ onNext }) => {
@@ -37,18 +37,16 @@ const CadastroEnderecoForm: React.FC<CadastroEnderecoFormProps> = ({ onNext }) =
   const handleNext = () => {
     const { cep, cidade, estado, bairro, rua, numero } = form;
 
-    // Verificação simples para garantir que os campos obrigatórios estejam preenchidos
     if (!cep || !cidade || !estado || !bairro || !rua || !numero) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    // Passa os dados para o componente pai
     onNext(form);
   };
 
   return (
-    <Box sx={{ backgroundColor: '#8A6D63', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       {/* Navbar */}
       <Box component="nav" sx={{ padding: 2, backgroundColor: '#fff', boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)' }}>
         <Grid container justifyContent="center">
@@ -56,6 +54,27 @@ const CadastroEnderecoForm: React.FC<CadastroEnderecoFormProps> = ({ onNext }) =
             <Image src={logo} alt="Belezure logo" width={150} height={50} style={{ cursor: 'pointer' }} />
           </Link>
         </Grid>
+      </Box>
+
+      {/* Background Image */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1, // Coloca a imagem atrás do conteúdo
+          opacity: 0.9,
+        }}
+      >
+        <Image
+          src="/images/background2.png" // Substitua pelo caminho da sua imagem
+          alt="Background Image"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </Box>
 
       {/* Formulário de Cadastro de Endereço */}
@@ -169,7 +188,7 @@ const CadastroEnderecoForm: React.FC<CadastroEnderecoFormProps> = ({ onNext }) =
         </Grid>
       </Box>
 
-      {/* Footer fora do formulário, ocupando toda a largura da tela */}
+      {/* Footer fora do formulário */}
       <Footer />
     </Box>
   );
