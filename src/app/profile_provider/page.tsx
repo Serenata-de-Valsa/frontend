@@ -65,7 +65,7 @@ const PerfilPage: React.FC = () => {
         }
         
         // Se o usuário for prestador, buscar dados do prestador
-        if (user.tipoUsuario === '2') {
+        if (user.tipoUsuario === '1') {
           const prestadorDocRef = doc(db, 'prestadores_servico', userId);
           const prestadorDocSnap = await getDoc(prestadorDocRef);
           if (prestadorDocSnap.exists()) {
@@ -123,7 +123,7 @@ const PerfilPage: React.FC = () => {
         </Box>
 
         {/* Se o usuário for prestador, exibir dados adicionais */}
-        {userData.tipoUsuario === '2' && prestadorData && (
+        {userData.tipoUsuario === '1' && prestadorData && (
           <>
             <Divider sx={{ my: 3 }} />
             <Box>
@@ -135,6 +135,7 @@ const PerfilPage: React.FC = () => {
               <Typography variant="subtitle1">Nome Fantasia: {prestadorData.nome_fantasia}</Typography>
               <Typography variant="subtitle1">Especialidade: {prestadorData.especialidade}</Typography>
               <Typography variant="subtitle1">Ramo: {prestadorData.ramo}</Typography>
+              <Typography variant="subtitle1">Biografia: {prestadorData.sobre}</Typography>
               <Typography variant="body1" sx={{ mt: 2 }}>
                 {prestadorData.sobre}
               </Typography>

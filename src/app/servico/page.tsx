@@ -92,10 +92,10 @@ const DetalheServico: React.FC = () => {
           {/* Detalhes do serviço */}
           <Grid item xs={12} md={6}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#8A513D' }}>
-              {servico.descricao}
+              {servico.categoria}
             </Typography>
             <Typography variant="body1" gutterBottom sx={{ color: '#555' }}>
-              {servico.categoria}
+              {servico.descricao}
             </Typography>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#8A513D' }}>
               R$ {servico.preco}

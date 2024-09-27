@@ -169,7 +169,7 @@ const HomePage: React.FC = () => {
                   <ServicoCard
                     idPrestador={servico.prestadorId}
                     foto={servico.foto}
-                    nomeServico={servico.descricao}
+                    nomeServico={servico.categoria}
                     localizacao={`${servico.bairro}, ${servico.cidade}`}
                     nomePrestador={servico.nome_fantasia}
                     onClick={() => handleNavigation(`/servico?servicoId=${servico.id}`)}
