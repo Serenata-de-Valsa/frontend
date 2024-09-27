@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // Importe o useRouter para redirecionar
 import { Box, Container, Typography, Grid, Button, Avatar } from '@mui/material';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
@@ -25,6 +25,7 @@ interface Prestador {
 const DetalheServico: React.FC = () => {
   const searchParams = useSearchParams();
   const servicoId = searchParams.get('servicoId');
+  const router = useRouter(); // Inicialize o useRouter
   const [servico, setServico] = useState<Servico | null>(null);
   const [prestador, setPrestador] = useState<Prestador | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,6 +60,11 @@ const DetalheServico: React.FC = () => {
 
     fetchData();
   }, [servicoId]);
+
+  const handleAgendarServico = () => {
+    // Redireciona para a página de agendamento
+    router.push('/agendamento'); // Substitua pelo caminho da página de agendamento
+  };
 
   if (loading) {
     return <Typography>Carregando...</Typography>;
@@ -109,6 +115,7 @@ const DetalheServico: React.FC = () => {
                 width: '100%',
                 marginBottom: '16px',
               }}
+              onClick={handleAgendarServico} // Função que redireciona para a página de agendamento
             >
               Agendar serviço
             </Button>
